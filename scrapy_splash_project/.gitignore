@@ -4,8 +4,11 @@ __pycache__/
 .scrapy/
 httpcache/
 
-# Output files
-*.json
+# Data folders
+output/
+input/*.json
+
+# Output files (except input examples)
 *.csv
 *.xml
 *.jl
