@@ -1,0 +1,14 @@
+services:
+  splash:
+    image: scrapinghub/splash:latest
+    ports:
+      - "8050:8050"
+    command: --max-timeout 3600
+    restart: unless-stopped
+    environment:
+      - SPLASH_VERBOSITY=3
+    volumes:
+      - splash-data:/var/lib/splash
+
+volumes:
+  splash-data:

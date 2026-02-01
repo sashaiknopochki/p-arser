@@ -1,0 +1,31 @@
+# Scrapy
+*.pyc
+__pycache__/
+.scrapy/
+httpcache/
+
+# Output files
+*.json
+*.csv
+*.xml
+*.jl
+
+# Screenshots
+*.png
+
+# Python
+*.egg-info/
+dist/
+build/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
