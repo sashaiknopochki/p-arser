@@ -105,23 +105,38 @@ class RagSpider(scrapy.Spider):
 
     lua_script = """
     function main(splash, args)
-        splash:set_user_agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36')
-        assert(splash:go(args.url))
-        assert(splash:wait(5))
+        splash:set_user_agent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
 
-        -- Wait for React app to render (check for container div with content)
-        local max_wait = 10
-        local check_interval = 0.5
+        -- Increase viewport for better rendering
+        splash:set_viewport_size(1920, 1080)
+
+        assert(splash:go(args.url))
+
+        -- Initial wait for page structure
+        assert(splash:wait(3))
+
+        -- Wait for dynamic content to load
+        -- Check for actual content in body, not just container
+        local max_wait = 15
+        local check_interval = 1
         local elapsed = 0
 
         while elapsed < max_wait do
-            local container = splash:select('#container')
-            if container and container:text() ~= '' then
-                break
+            -- Get body text length
+            local body = splash:select('body')
+            if body then
+                local text = body:text()
+                -- If body has substantial content (more than just "enable JS" message)
+                if text and string.len(text) > 200 then
+                    break
+                end
             end
             splash:wait(check_interval)
             elapsed = elapsed + check_interval
         end
+
+        -- Final wait to ensure everything is loaded
+        splash:wait(2)
 
         return {html = splash:html()}
     end
